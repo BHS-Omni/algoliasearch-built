@@ -32,7 +32,7 @@
     "@algolia/client-analytics": "4.10.5",
     "@algolia/client-common": "4.10.5",
     "@algolia/client-personalization": "4.10.5",
-    "@algolia/client-search": "4.10.5",
+    "@algolia/client-search": "https://github.com/BHS-Omni/algolia-clientsearch-built.git#main",
     "@algolia/logger-common": "4.10.5",
     "@algolia/logger-console": "4.10.5",
     "@algolia/requester-browser-xhr": "4.10.5",
