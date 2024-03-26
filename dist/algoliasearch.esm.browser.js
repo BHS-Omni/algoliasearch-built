@@ -17,13 +17,13 @@ function createBrowserLocalStorageCache(options) {
         }) {
             return Promise.resolve()
                 .then(() => {
-                const keyAsString = JSON.stringify(key);
-                const value = getNamespace()[keyAsString];
-                return Promise.all([value || defaultValue(), value !== undefined]);
-            })
+                    const keyAsString = JSON.stringify(key);
+                    const value = getNamespace()[keyAsString];
+                    return Promise.all([value || defaultValue(), value !== undefined]);
+                })
                 .then(([value, exists]) => {
-                return Promise.all([value, exists || events.miss(value)]);
-            })
+                    return Promise.all([value, exists || events.miss(value)]);
+                })
                 .then(([value]) => value);
         },
         set(key, value) {
@@ -379,7 +379,7 @@ function retryableRequest(transporter, statelessHosts, request, requestOptions) 
     };
     let timeoutsCount = 0; // eslint-disable-line functional/no-let
     const retry = (hosts, // eslint-disable-line functional/prefer-readonly-type
-    getTimeout) => {
+        getTimeout) => {
         /**
          * We iterate on each host, until there is no host left.
          */
@@ -822,7 +822,7 @@ const createSearchClient = options => {
     const auth = createAuth(options.authMode !== undefined ? options.authMode : AuthMode.WithinHeaders, appId, options.apiKey);
     const transporter = createTransporter({
         hosts: [
-            { url: `65.0.106.222:3000`, accept: CallEnum.Read },
+            { url: `${appId}-dsn.algolia.net`, accept: CallEnum.Read },
             { url: `${appId}.algolia.net`, accept: CallEnum.Write },
         ].concat(shuffle([
             { url: `${appId}-1.algolianet.com` },
@@ -990,10 +990,10 @@ const deleteApiKey = (base) => {
                 return getApiKey(base)(apiKey, waitRequestOptions)
                     .then(retry)
                     .catch((apiError) => {
-                    if (apiError.status !== 404) {
-                        throw apiError;
-                    }
-                });
+                        if (apiError.status !== 404) {
+                            throw apiError;
+                        }
+                    });
             });
         };
         return createWaitablePromise(base.transporter.write({
@@ -1327,8 +1327,8 @@ const updateApiKey = (base) => {
             return Object.keys(updatedFields)
                 .filter((updatedField) => apiKeyFields.indexOf(updatedField) !== -1)
                 .every(updatedField => {
-                return getApiKeyResponse[updatedField] === updatedFields[updatedField];
-            });
+                    return getApiKeyResponse[updatedField] === updatedFields[updatedField];
+                });
         };
         const wait = (_, waitRequestOptions) => createRetryablePromise(retry => {
             return getApiKey(base)(apiKey, waitRequestOptions).then(getApiKeyResponse => {
@@ -1581,11 +1581,11 @@ const exists = (base) => {
         return getSettings(base)(requestOptions)
             .then(() => true)
             .catch(error => {
-            if (error.status !== 404) {
-                throw error;
-            }
-            return false;
-        });
+                if (error.status !== 404) {
+                    throw error;
+                }
+                return false;
+            });
     };
 };
 
@@ -1769,28 +1769,28 @@ const replaceAllObjects = (base) => {
             ? copyWaitablePromise.wait(options)
             : copyWaitablePromise)
             .then(() => {
-            const saveObjectsWaitablePromise = saveObjectsInTemporary(objects, {
-                ...options,
-                autoGenerateObjectIDIfNotExist,
-                batchSize,
-            });
-            // eslint-disable-next-line functional/immutable-data
-            responses.push(saveObjectsWaitablePromise);
-            return safe ? saveObjectsWaitablePromise.wait(options) : saveObjectsWaitablePromise;
-        })
+                const saveObjectsWaitablePromise = saveObjectsInTemporary(objects, {
+                    ...options,
+                    autoGenerateObjectIDIfNotExist,
+                    batchSize,
+                });
+                // eslint-disable-next-line functional/immutable-data
+                responses.push(saveObjectsWaitablePromise);
+                return safe ? saveObjectsWaitablePromise.wait(options) : saveObjectsWaitablePromise;
+            })
             .then(() => {
-            const moveWaitablePromise = operation(temporaryIndexName, base.indexName, 'move', options);
-            // eslint-disable-next-line functional/immutable-data
-            responses.push(moveWaitablePromise);
-            return safe ? moveWaitablePromise.wait(options) : moveWaitablePromise;
-        })
+                const moveWaitablePromise = operation(temporaryIndexName, base.indexName, 'move', options);
+                // eslint-disable-next-line functional/immutable-data
+                responses.push(moveWaitablePromise);
+                return safe ? moveWaitablePromise.wait(options) : moveWaitablePromise;
+            })
             .then(() => Promise.all(responses))
             .then(([copyResponse, saveObjectsResponse, moveResponse]) => {
-            return {
-                objectIDs: saveObjectsResponse.objectIDs,
-                taskIDs: [copyResponse.taskID, ...saveObjectsResponse.taskIDs, moveResponse.taskID],
-            };
-        });
+                return {
+                    objectIDs: saveObjectsResponse.objectIDs,
+                    taskIDs: [copyResponse.taskID, ...saveObjectsResponse.taskIDs, moveResponse.taskID],
+                };
+            });
         return createWaitablePromise(result, (_, waitRequestOptions) => {
             return Promise.all(responses.map(response => response.wait(waitRequestOptions)));
         });
