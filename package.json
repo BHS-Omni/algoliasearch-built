@@ -1,6 +1,6 @@
 {
   "name": "algoliasearch",
-  "version": "4.10.10",
+  "version": "4.10.11",
   "private": false,
   "description": "A fully-featured and blazing-fast JavaScript API client to interact with Algolia API.",
   "repository": {
