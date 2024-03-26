@@ -146,7 +146,7 @@ export declare type RecommendationClient = PersonalizationClient;
 
 export declare type SearchClient = SearchClient_2 & {
     readonly initIndex: (indexName: string) => SearchIndex;
-    readonly search: <TObject>(queries: readonly MultipleQueriesQuery[], requestOptions?: RequestOptions & MultipleQueriesOptions) => Readonly<Promise<MultipleQueriesResponse<TObject>>>;
+    search: <TObject>(queries: readonly MultipleQueriesQuery[], requestOptions?: RequestOptions & MultipleQueriesOptions) => Readonly<Promise<MultipleQueriesResponse<TObject>>>;
     readonly searchForFacetValues: (queries: ReadonlyArray<{
         readonly indexName: string;
         readonly params: SearchForFacetValuesQueryParams & SearchOptions;
